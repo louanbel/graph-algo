@@ -24,7 +24,7 @@ public class AdjacencyMatrixDirectedGraph {
     protected int order;		// Number of vertices
     protected int m = 0;		// Number of edges/arcs
     protected int[][] matrix;	// The adjacency matrix
-	
+
 	//--------------------------------------------------
 	// 				Constructors
 	//-------------------------------------------------- 
@@ -117,30 +117,44 @@ public class AdjacencyMatrixDirectedGraph {
 	 * @return true if arc (from,to) exists in the graph
  	 */
 	public boolean isArc(int from, int to) {
-		// A completer
-		return true;
+		return matrix[from][to] > 0;
 	}
 
 	/**
 	 * removes the arc (from,to) if there exists at least one between these nodes in the graph.
 	 */
 	public void removeArc(int from, int to) {
-		// A completer
+		if(isArc(from, to))
+		{
+			matrix[from][to] -= 1;
+			m -= 1;
+		}
+		else
+		{
+			System.out.println("Cannot remove the arc {" + from + ',' + to + "}" + " because it doesn't exist");
+		}
 	}
 
 	/**
 	 * Adds the arc (from,to). We allow multiple graph.
 	 */
 	public void addArc(int from, int to) {
-		// A completer
+		matrix[from][to] += 1;
+		m += 1;
 	}
 
 	/**
 	 * @return a new graph which is the inverse graph of this.matrix
  	 */
 	public AdjacencyMatrixDirectedGraph computeInverse() {
-		AdjacencyMatrixDirectedGraph am = new AdjacencyMatrixDirectedGraph(new int[this.order][this.order]);	
-		// A completer
+		AdjacencyMatrixDirectedGraph am = new AdjacencyMatrixDirectedGraph(new int[this.order][this.order]);
+		for(int i = 0; i < this.order; i++)
+		{
+			for(int j = 0; j < this.order; j++)
+			{
+				am.matrix[i][j] = this.matrix[j][i];
+			}
+		}
 		return am;
 	}
 
@@ -176,6 +190,20 @@ public class AdjacencyMatrixDirectedGraph {
 		for (Integer integer : t2) {
 			System.out.print(integer + ", ");
 		}
-		// A completer
+
+		// Test of isEdge with arc {0,1} and {0,3}
+		System.out.println("\nisArc(0,1) -> expect : false, given : " + am.isArc(0,1));
+		System.out.println("\nisArc(0,3) -> expect : true, given : " + am.isArc(0,3));
+
+		// Test of removeArc with arc {0,3}
+		am.removeArc(0,3);
+		System.out.println("\nisArc(0,3) -> expect : false, given : " + am.isArc(0,3));
+		// Test of addArc with arc {0,3}
+		am.addArc(0,3);
+		System.out.println("\nisArc(0,3) -> expect : true, given : " + am.isArc(0,3));
+
+		// Test of computeInverse()
+		System.out.println("\ncomputeInverse() -> expect to be inverse of " + am + ", result : " + am.computeInverse());
+
 	}
 }

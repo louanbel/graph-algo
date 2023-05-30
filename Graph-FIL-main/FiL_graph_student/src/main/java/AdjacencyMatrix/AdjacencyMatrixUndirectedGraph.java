@@ -81,7 +81,7 @@ public class AdjacencyMatrixUndirectedGraph {
 
 	/**
 	 * 
-	 * @param x the vertex selected
+	 * @param v the vertex selected
 	 * @return a list of vertices which are the neighbours of x
 	 */
 	public List<Integer> getNeighbours(int v) {
@@ -102,22 +102,28 @@ public class AdjacencyMatrixUndirectedGraph {
      * @return true if the edge is in the graph.
      */
 	public boolean isEdge(int x, int y) {
-		// A completer
-		return true;		
+		return matrix[x][y] > 0 || matrix[y][x] > 0;
 	}
 	
 	/**
      * removes the edge (x,y) if there exists at least one between these nodes in the graph.
      */
 	public void removeEdge(int x, int y) {
-		// A completer
+		if(isEdge(x, y))
+		{
+			matrix[x][y] -= 1;
+			matrix[y][x] -= 1;
+			m -= 1;
+		}
 	}
 
 	/**
      * adds the edge (x,y), we allow the multi-graph.
      */
 	public void addEdge(int x, int y) {
-		// A completer
+		matrix[x][y] += 1;
+		matrix[y][x] += 1;
+		m += 1;
 	}
 
 	
@@ -142,8 +148,9 @@ public class AdjacencyMatrixUndirectedGraph {
 	}
 
 	public static void main(String[] args) {
+
 		int[][] mat2 = GraphTools.generateGraphData(10, 35, false, true, false, 100001);
-		//GraphTools.afficherMatrix(mat2);
+		/*GraphTools.afficherMatrix(mat2);*/
 		AdjacencyMatrixUndirectedGraph am = new AdjacencyMatrixUndirectedGraph(mat2);
 		System.out.println(am);
 		System.out.println("n = "+am.getNbNodes()+ "\nm = "+am.getNbEdges() +"\n");
@@ -161,11 +168,23 @@ public class AdjacencyMatrixUndirectedGraph {
 			am.addEdge(3, 5);
 		
 		System.out.println("\n"+am);
-		
+		System.out.println("\n\nisEdge(3, 5) ? " + am.isEdge(3, 5));
+
 		System.out.println("\nAfter removing one edge {3,5} :");
 		am.removeEdge(3,5);
 		System.out.println(am);
-		// A completer
+
+		// Test of isEdge with arc {0,1} and {0,3}
+		System.out.println("\nisEdge(0,1) -> expect : false, given : " + am.isEdge(0,1));
+		System.out.println("\nisEdge(0,3) -> expect : true, given : " + am.isEdge(0,3));
+
+		// Test of removeArc with arc {0,3}
+		am.removeEdge(0,3);
+		System.out.println("\nisEdge(0,3) -> expect : false, given : " + am.isEdge(0,3));
+		// Test of addArc with arc {0,3}
+		am.addEdge(0,3);
+		System.out.println("\nisEdge(0,3) -> expect : true, given : " + am.isEdge(0,3));
+
 	}
 
 }

@@ -1,6 +1,7 @@
 package AdjacencyList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import GraphAlgorithms.GraphTools;
@@ -103,9 +104,7 @@ public class AdjacencyListUndirectedGraph {
 	 * @return true if there is an edge between x and y
 	 */
     public boolean isEdge(UndirectedNode x, UndirectedNode y) {  
-    	return getNodeOfList(x).getNeighbours().containsKey(getNodeOfList(y));
-        // A completer
-    	//return true;
+    	return getNodeOfList(x).getNeighbours().containsKey(getNodeOfList(y)) || getNodeOfList(y).getNeighbours().containsKey(getNodeOfList(x));
     }
 
     /**
@@ -113,7 +112,8 @@ public class AdjacencyListUndirectedGraph {
      */
     public void removeEdge(UndirectedNode x, UndirectedNode y) {
     	if(isEdge(x,y)){
-    		// A completer
+            getNodeOfList(x).getNeighbours().remove(getNodeOfList(y));
+            getNodeOfList(y).getNeighbours().remove(getNodeOfList(x));
     	}
     }
 
@@ -122,8 +122,9 @@ public class AdjacencyListUndirectedGraph {
      */
     public void addEdge(UndirectedNode x, UndirectedNode y) {
     	if(!isEdge(x,y)){
-    		// A completer
-    	}
+            getNodeOfList(x).getNeighbours().put(getNodeOfList(y), 1);
+            getNodeOfList(y).getNeighbours().put(getNodeOfList(x), 1);
+        }
     }
 
     //--------------------------------------------------
@@ -151,7 +152,12 @@ public class AdjacencyListUndirectedGraph {
      */
     public int[][] toAdjacencyMatrix() {
         int[][] matrix = new int[order][order];
-        // A completer
+        Arrays.fill(matrix, 0);
+        for (UndirectedNode n : nodes) {
+            for (UndirectedNode sn : n.getNeighbours().keySet()) {
+                matrix[n.getLabel()][sn.getLabel()] += 1;
+            }
+        }
         return matrix;
     }
 
@@ -175,7 +181,9 @@ public class AdjacencyListUndirectedGraph {
         AdjacencyListUndirectedGraph al = new AdjacencyListUndirectedGraph(mat);
         System.out.println(al);
         System.out.println(al.isEdge(new UndirectedNode(2), new UndirectedNode(5)));
+        System.out.println("test " + al.nodes.get(0).getNeighbours().keySet());
         // A completer
+        System.out.println("toAdjacencyMatrix() -> " + al.toAdjacencyMatrix());
     }
 
 }

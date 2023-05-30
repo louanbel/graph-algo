@@ -109,22 +109,31 @@ public class AdjacencyListDirectedGraph {
 	 * @return true if arc (from,to) exists in the graph
  	 */
     public boolean isArc(DirectedNode from, DirectedNode to) {
-    	// A completer
-    	return false;
+    	return from.getSuccs().containsKey(to);
     }
 
     /**
 	 * Removes the arc (from,to), if it exists
  	 */
     public void removeArc(DirectedNode from, DirectedNode to) {
-    	// A completer
+    	if(isArc(from, to))
+        {
+            from.getSuccs().remove(to);
+            to.getPreds().remove(from);
+            this.m--;
+        }
     }
 
     /**
 	 * Adds the arc (from,to) if it is not already present in the graph, requires the existing of nodes from and to 
  	 */
     public void addArc(DirectedNode from, DirectedNode to) {
-    	// A completer
+    	if(!isArc(from, to)) 
+        {
+            from.addSucc(to, _DEBBUG);
+            to.addPred(from, _DEBBUG);
+            this.m++;
+        }
     }
 
     //--------------------------------------------------
@@ -166,7 +175,7 @@ public class AdjacencyListDirectedGraph {
  	 */
     public AdjacencyListDirectedGraph computeInverse() {
         AdjacencyListDirectedGraph g = new AdjacencyListDirectedGraph(new int[this.order][this.order]); // creation of a new empty matrix of size equal to "order". 
-        // A completer
+        //
         return g;
     }
     
@@ -189,6 +198,12 @@ public class AdjacencyListDirectedGraph {
         GraphTools.afficherMatrix(Matrix);
         AdjacencyListDirectedGraph al = new AdjacencyListDirectedGraph(Matrix);
         System.out.println(al);
-        // A completer
+        // Test isArc
+        DirectedNode node0 = al.getNodes().get(0);
+        DirectedNode node3 = al.getNodes().get(3);
+        System.out.println(al.isArc(node0, node3));
+        // Test removeArc should be false
+        al.removeArc(node0, node3);
+        System.out.println(al.isArc(node0, node3));
     }
 }
