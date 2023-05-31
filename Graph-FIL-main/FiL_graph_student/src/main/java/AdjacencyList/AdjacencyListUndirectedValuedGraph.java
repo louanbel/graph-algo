@@ -39,7 +39,12 @@ public class AdjacencyListUndirectedValuedGraph extends AdjacencyListUndirectedG
      * Adds the edge (from,to) with cost if it is not already present in the graph
      */
     public void addEdge(UndirectedNode x, UndirectedNode y, int cost) {
-    	// A completer
+        if(!isEdge(x,y)){
+            UndirectedNode nodeX = this.getNodes().get(x.getLabel());
+            UndirectedNode nodeY = this.getNodes().get(y.getLabel());
+            nodeX.getNeighbours().put(nodeY,cost);
+            nodeY.getNeighbours().put(nodeX,cost);
+        }
     }
     
     @Override
@@ -63,6 +68,10 @@ public class AdjacencyListUndirectedValuedGraph extends AdjacencyListUndirectedG
         GraphTools.afficherMatrix(matrixValued);
         AdjacencyListUndirectedValuedGraph al = new AdjacencyListUndirectedValuedGraph(matrixValued);
         System.out.println(al);
-        // A completer
+        // Test addEdge
+        UndirectedNode nodeX = new UndirectedNode(0);
+        UndirectedNode nodeY = new UndirectedNode(0);
+        al.addEdge(nodeX, nodeY, 1);
+        System.out.println(al);
     }
 }

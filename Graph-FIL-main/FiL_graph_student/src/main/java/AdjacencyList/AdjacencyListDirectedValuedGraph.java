@@ -40,8 +40,11 @@ public class AdjacencyListDirectedValuedGraph extends AdjacencyListDirectedGraph
      */
     public void addArc(DirectedNode from, DirectedNode to, int cost) {
         super.addArc(from, to);
-        if(!from.getSuccs().containsValue(cost))
+        if(!this.isArc(from, to))
+        {
             from.getSuccs().put(to, cost);
+            to.getPreds().put(from, cost);
+        }
     }
     
     @Override
@@ -66,7 +69,11 @@ public class AdjacencyListDirectedValuedGraph extends AdjacencyListDirectedGraph
         GraphTools.afficherMatrix(matrixValued);
         AdjacencyListDirectedValuedGraph al = new AdjacencyListDirectedValuedGraph(matrixValued);
         System.out.println(al);
-        // A completer
+        // Test addArc
+        DirectedNode nodeX = new DirectedNode(0);
+        DirectedNode nodeY = new DirectedNode(1);
+        al.addArc(nodeX, nodeY, 1555);
+        System.out.println(al);
     }
 	
 }
