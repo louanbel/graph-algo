@@ -50,6 +50,10 @@ public class AdjacencyMatrixUndirectedValuedGraph extends AdjacencyMatrixUndirec
 	public void removeEdge(int x, int y) {
 		super.removeEdge(x, y);
 		// A completer
+		if (!super.isEdge(x, y)) {
+			this.matrixCosts[x][y]	= 0;
+			this.matrixCosts[y][x]	= 0;
+		}
 	}
 
 	/**
@@ -58,6 +62,7 @@ public class AdjacencyMatrixUndirectedValuedGraph extends AdjacencyMatrixUndirec
 	public void addEdge(int x, int y, int cost ) {
 		super.addEdge(x,y);
 		// A completer
+		this.matrixCosts[x][y]	= cost;
 	}
 	
 	public String toString() {

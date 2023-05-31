@@ -46,7 +46,9 @@ public class AdjacencyMatrixDirectedValuedGraph extends AdjacencyMatrixDirectedG
 	@Override
 	public void removeArc(int from, int to) {
 		super.removeArc(from, to);
-		// A completer
+		if (!super.isArc(from, to)) {
+			this.matrixCosts[from][to]	= 0;
+		}
 	}
 
 	/**
@@ -54,7 +56,9 @@ public class AdjacencyMatrixDirectedValuedGraph extends AdjacencyMatrixDirectedG
      */
 	public void addArc(int from, int to, int cost ) {
 		super.addArc(from,to);
-		// A completer
+		if (this.matrixCosts[from][to] == 0) {
+			this.matrixCosts[from][to] = cost;
+		}
 	}
 	
 	@Override
