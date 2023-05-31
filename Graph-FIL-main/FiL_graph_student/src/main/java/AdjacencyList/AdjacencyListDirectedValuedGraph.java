@@ -39,7 +39,9 @@ public class AdjacencyListDirectedValuedGraph extends AdjacencyListDirectedGraph
      * Adds the arc (from,to) with cost  if it is not already present in the graph
      */
     public void addArc(DirectedNode from, DirectedNode to, int cost) {
-    	// A completer      
+        super.addArc(from, to);
+        if(!from.getSuccs().containsValue(cost))
+            from.getSuccs().put(to, cost);
     }
     
     @Override
