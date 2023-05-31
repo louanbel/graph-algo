@@ -109,7 +109,7 @@ public class AdjacencyListDirectedGraph {
 	 * @return true if arc (from,to) exists in the graph
  	 */
     public boolean isArc(DirectedNode from, DirectedNode to) {
-    	return from.getSuccs().containsKey(to);
+    	return from.getSuccs().get(to) != null;
     }
 
     /**

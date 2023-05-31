@@ -1,5 +1,6 @@
 package GraphAlgorithms;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,51 +15,116 @@ public class DijkstraAlgo {
         this.graph = g;
     }
 
+    public int cout(DirectedNode x, DirectedNode y) {
+        return x.getSuccs().get(y);
+    }
+
+    public char getLetterFromPosition(int position) {
+        if (position < 1 || position > 26) {
+            throw new IllegalArgumentException("Position invalide. La position doit être entre 1 et 26.");
+        }
+        char letter = (char) ('A' + position - 1);
+        return letter;
+    }
+
     public void runDijkstraAlgo(DirectedNode initialNode) {
-        List<DirectedNode> edgeNotMarked = this.graph.getNodes();
-        HashMap<DirectedNode, DirectedNode> pred = new HashMap<DirectedNode, DirectedNode>();
-        HashMap<DirectedNode, Integer> val = new HashMap<DirectedNode, Integer>();
-        
+        ArrayList<Boolean> edgeMarked = new ArrayList<Boolean>();
+        ArrayList<DirectedNode> pred = new ArrayList<DirectedNode>();
+        ArrayList<Integer> val = new ArrayList<Integer>();
+
         // Initializing
-        for(DirectedNode n: this.graph.getNodes()) {
-            val.put(n, Integer.MAX_VALUE / 2);
-            pred.put(n, null);
+        for (DirectedNode n : this.graph.getNodes()) {
+            edgeMarked.add(n.getLabel(), false);
+            val.add(n.getLabel(), Integer.MAX_VALUE / 2);
+            pred.add(n.getLabel(), null);
         }
 
-        edgeNotMarked.remove(initialNode.getLabel());
+        edgeMarked.add(initialNode.getLabel(), true);
+        val.add(initialNode.getLabel(), 0);
+        pred.add(initialNode.getLabel(), initialNode);
 
-        DirectedNode x = initialNode;
         // While all the nodes are not marked
-        while(!edgeNotMarked.isEmpty()) {
-            
+        while (edgeMarked.contains(false)) {
+            int x = 0;
             // Look for node x not marked with minimal value
             int min = Integer.MAX_VALUE / 2;
-            for(DirectedNode y: this.graph.getNodes()) {
-                if(edgeNotMarked.contains(y) && val.get(y) < min) {
+
+            for (int y = 0; y < this.graph.getNbNodes(); y++) {
+                if (!edgeMarked.get(y) && val.get(y) < min) {
                     x = y;
                     min = val.get(y);
                 }
             }
-            
+
             // Update not fixed successors of x
-            if(min < Integer.MAX_VALUE / 2) {
-                edgeNotMarked.remove(x);
-                for(DirectedNode y: x.getSuccs().keySet())
-                {
-                    if(edgeNotMarked.contains(y) && val.get(x) + x.getSuccs().get(y) < val.get(y)) {
-                        val.put(y, val.get(x) + x.getSuccs().get(y));
-                        pred.put(y, x);
+            if (min < Integer.MAX_VALUE) {
+                edgeMarked.set(x, true);
+                DirectedNode nodeX = this.graph.getNodes().get(x);
+                for (DirectedNode succ : nodeX.getSuccs().keySet()) {
+                    if (!edgeMarked.get(succ.getLabel())) {
+                        if (val.get(x) + cout(nodeX, succ) < val.get(succ.getLabel())) {
+                            // System.out.println(val.get(x) + cout(nodeX, succ));
+                            System.out.println("DEBUG FINAL : " + cout(nodeX, succ));
+                            System.out.println("EDGE MARKED : " + edgeMarked);
+                            val.set(succ.getLabel(), val.get(x) + cout(nodeX, succ));
+                            pred.set(succ.getLabel(), nodeX);
+                        }
+    
                     }
                 }
             }
         }
-    }
-    public static void main(String[] args) throws Exception {
-        int[][] matrix = GraphTools.generateGraphData(10, 20, false, false, false, 100001);
-        int[][] matrixValued = GraphTools.generateValuedGraphData(10, false, false, true, false, 100001);
-        AdjacencyListDirectedValuedGraph al = new AdjacencyListDirectedValuedGraph(matrixValued);
 
-        DijkstraAlgo dijkstraAlgo = new DijkstraAlgo(al);
-        dijkstraAlgo.runDijkstraAlgo(null); // wip
+        // // printing results
+        // System.out.println("_________________________");
+        // System.out.print("nodes | ");
+        // for (DirectedNode n : this.graph.getNodes()) {
+        //     System.out.print(getLetterFromPosition(n.getLabel() + 1) + " ");
+        //     if (n == this.graph.getNodes().get(this.graph.getNbNodes() - 1)) {
+        //         System.out.println(" | ");
+        //     }
+        // }
+        // System.out.println("val   |");
+        // for (DirectedNode n : this.graph.getNodes()) {
+        //     System.out.print(n);
+        //     if (n == this.graph.getNodes().get(this.graph.getNbNodes() - 1)) {
+        //         System.out.print(" | ");
+        //     }
+        // }
+    }
+
+    public static void main(String[] args) throws Exception {
+        int A = 0,
+                B = 1,
+                C = 2,
+                D = 3,
+                E = 4,
+                F = 5,
+                G = 6,
+                H = 7;
+
+        // Using class example
+        AdjacencyListDirectedValuedGraph graph = new AdjacencyListDirectedValuedGraph(new int[8][8]);
+        graph.addArc(new DirectedNode(A), new DirectedNode(B), 2);
+        graph.addArc(new DirectedNode(A), new DirectedNode(C), 6);
+        graph.addArc(new DirectedNode(B), new DirectedNode(D), 1);
+        graph.addArc(new DirectedNode(B), new DirectedNode(H), 1);
+        graph.addArc(new DirectedNode(C), new DirectedNode(B), 3);
+        graph.addArc(new DirectedNode(C), new DirectedNode(G), 2);
+        graph.addArc(new DirectedNode(C), new DirectedNode(F), 2);
+        graph.addArc(new DirectedNode(D), new DirectedNode(C), 2);
+        graph.addArc(new DirectedNode(D), new DirectedNode(G), 6);
+        graph.addArc(new DirectedNode(D), new DirectedNode(E), 7);
+        graph.addArc(new DirectedNode(E), new DirectedNode(B), 3);
+        graph.addArc(new DirectedNode(E), new DirectedNode(H), 2);
+        graph.addArc(new DirectedNode(F), new DirectedNode(D), 1);
+        graph.addArc(new DirectedNode(F), new DirectedNode(E), 4);
+        graph.addArc(new DirectedNode(G), new DirectedNode(A), 1);
+        graph.addArc(new DirectedNode(G), new DirectedNode(F), 2);
+        graph.addArc(new DirectedNode(H), new DirectedNode(F), 3);
+        DijkstraAlgo dijkstraAlgo = new DijkstraAlgo(graph);
+
+        // Using A as initial node
+        dijkstraAlgo.runDijkstraAlgo(graph.getNodes().get(0));
     }
 }

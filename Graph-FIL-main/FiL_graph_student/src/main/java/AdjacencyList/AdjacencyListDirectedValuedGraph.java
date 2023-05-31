@@ -39,11 +39,14 @@ public class AdjacencyListDirectedValuedGraph extends AdjacencyListDirectedGraph
      * Adds the arc (from,to) with cost  if it is not already present in the graph
      */
     public void addArc(DirectedNode from, DirectedNode to, int cost) {
-        super.addArc(from, to);
+        // super.addArc(from, to);
         if(!this.isArc(from, to))
         {
-            from.getSuccs().put(to, cost);
-            to.getPreds().put(from, cost);
+            DirectedNode nodeFrom = this.getNodeOfList(from);
+            DirectedNode nodeTo = this.getNodeOfList(to);
+            nodeFrom.getSuccs().put(to, cost);
+            nodeTo.getPreds().put(from, cost);
+            this.m++;
         }
     }
     
