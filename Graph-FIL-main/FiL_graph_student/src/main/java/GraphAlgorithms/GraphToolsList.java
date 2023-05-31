@@ -17,7 +17,7 @@ public class GraphToolsList  extends GraphTools {
 
 	private static int[] visite;
 	private static int[] debut;
-	private static int[] fin;
+	private static List<Integer> fin;
 	private static List<Integer> order_CC;
 	private static int cpt=0;
 
@@ -71,6 +71,7 @@ public class GraphToolsList  extends GraphTools {
 				explorerSommet(graph, succ, visited);
 			}
 		}
+		fin.add(vertex);
 	}
 
 	public static void explorerGraphe(AdjacencyListDirectedGraph graph) {
@@ -100,5 +101,7 @@ public class GraphToolsList  extends GraphTools {
 
 		System.out.println("DFS Traversal:");
 		explorerGraphe(al);
+
+		System.out.println("\nOrder of completely explored vertices: " + fin);
 	}
 }
