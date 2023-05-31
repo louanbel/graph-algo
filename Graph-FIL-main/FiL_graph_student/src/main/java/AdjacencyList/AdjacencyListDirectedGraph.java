@@ -175,7 +175,12 @@ public class AdjacencyListDirectedGraph {
  	 */
     public AdjacencyListDirectedGraph computeInverse() {
         AdjacencyListDirectedGraph g = new AdjacencyListDirectedGraph(new int[this.order][this.order]); // creation of a new empty matrix of size equal to "order". 
-        //
+        for (DirectedNode n : this.getNodes()) {
+            for (DirectedNode sn : n.getSuccs().keySet()) {
+                g.addArc(sn, n);
+            }
+        }
+        System.out.println("g : " + g.getNodes().get(0).getSuccs().size());
         return g;
     }
     
@@ -204,6 +209,13 @@ public class AdjacencyListDirectedGraph {
         System.out.println(al.isArc(node0, node3));
         // Test removeArc should be false
         al.removeArc(node0, node3);
-        System.out.println(al.isArc(node0, node3));
+        System.out.println("should be : false, result : " + al.isArc(node0, node3));
+        // Test addArc
+        al.addArc(node0, node3);
+        System.out.println("should be : true, result : " + al.isArc(node0, node3));
+        // Test computeInverse
+        System.out.println("old :\n" + al);
+        AdjacencyListDirectedGraph g = al.computeInverse();
+        System.out.println("new :\n" + g);
     }
 }
