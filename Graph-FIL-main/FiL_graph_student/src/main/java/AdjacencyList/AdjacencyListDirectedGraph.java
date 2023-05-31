@@ -118,8 +118,8 @@ public class AdjacencyListDirectedGraph {
     public void removeArc(DirectedNode from, DirectedNode to) {
     	if(isArc(from, to))
         {
-            from.getSuccs().remove(to);
-            to.getPreds().remove(from);
+            this.getNodeOfList(from).getSuccs().remove(getNodeOfList(to));
+            this.getNodeOfList(to).getPreds().remove(getNodeOfList(from));
             this.m--;
         }
     }
@@ -128,11 +128,12 @@ public class AdjacencyListDirectedGraph {
 	 * Adds the arc (from,to) if it is not already present in the graph, requires the existing of nodes from and to 
  	 */
     public void addArc(DirectedNode from, DirectedNode to) {
-    	if(!isArc(from, to)) 
+    	if(!this.isArc(from, to)) 
         {
-            from.addSucc(to, _DEBBUG);
-            to.addPred(from, _DEBBUG);
-            this.m++;
+            DirectedNode nodeFrom = this.getNodes().get(from.getLabel());
+            DirectedNode nodeTo = this.getNodes().get(to.getLabel());
+            nodeFrom.getSuccs().put(nodeTo,0);
+            nodeTo.getPreds().put(nodeFrom,0);
         }
     }
 
@@ -174,13 +175,14 @@ public class AdjacencyListDirectedGraph {
 	 * @return a new graph implementing IDirectedGraph interface which is the inverse graph of this
  	 */
     public AdjacencyListDirectedGraph computeInverse() {
-        AdjacencyListDirectedGraph g = new AdjacencyListDirectedGraph(new int[this.order][this.order]); // creation of a new empty matrix of size equal to "order". 
+        AdjacencyListDirectedGraph g = new AdjacencyListDirectedGraph(this); // creation of a new empty matrix of size equal to "order". 
+        System.out.println("this = " + this.getNodes().get(9).getSuccs().keySet());
         for (DirectedNode n : this.getNodes()) {
             for (DirectedNode sn : n.getSuccs().keySet()) {
                 g.addArc(sn, n);
+                g.removeArc(n, sn);
             }
         }
-        System.out.println("g : " + g.getNodes().get(0).getSuccs().size());
         return g;
     }
     
