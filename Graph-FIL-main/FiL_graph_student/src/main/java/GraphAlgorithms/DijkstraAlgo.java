@@ -1,10 +1,5 @@
 package GraphAlgorithms;
-
-import java.io.Console;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import AdjacencyList.AdjacencyListDirectedValuedGraph;
 import Nodes.DirectedNode;
 
@@ -34,14 +29,15 @@ public class DijkstraAlgo {
 
         // Initializing
         for (DirectedNode n : this.graph.getNodes()) {
+            System.out.println("add edge : " + n.getLabel());
             edgeMarked.add(n.getLabel(), false);
             val.add(n.getLabel(), Integer.MAX_VALUE / 2);
             pred.add(n.getLabel(), null);
         }
 
-        edgeMarked.add(initialNode.getLabel(), true);
-        val.add(initialNode.getLabel(), 0);
-        pred.add(initialNode.getLabel(), initialNode);
+        edgeMarked.set(initialNode.getLabel(), true);
+        val.set(initialNode.getLabel(), 0);
+        pred.set(initialNode.getLabel(), initialNode);
 
         // While all the nodes are not marked
         while (edgeMarked.contains(false)) {
@@ -63,34 +59,32 @@ public class DijkstraAlgo {
                 for (DirectedNode succ : nodeX.getSuccs().keySet()) {
                     if (!edgeMarked.get(succ.getLabel())) {
                         if (val.get(x) + cout(nodeX, succ) < val.get(succ.getLabel())) {
-                            // System.out.println(val.get(x) + cout(nodeX, succ));
                             System.out.println("DEBUG FINAL : " + cout(nodeX, succ));
                             System.out.println("EDGE MARKED : " + edgeMarked);
                             val.set(succ.getLabel(), val.get(x) + cout(nodeX, succ));
                             pred.set(succ.getLabel(), nodeX);
                         }
-    
                     }
                 }
             }
         }
 
-        // // printing results
-        // System.out.println("_________________________");
-        // System.out.print("nodes | ");
-        // for (DirectedNode n : this.graph.getNodes()) {
-        //     System.out.print(getLetterFromPosition(n.getLabel() + 1) + " ");
-        //     if (n == this.graph.getNodes().get(this.graph.getNbNodes() - 1)) {
-        //         System.out.println(" | ");
-        //     }
-        // }
-        // System.out.println("val   |");
-        // for (DirectedNode n : this.graph.getNodes()) {
-        //     System.out.print(n);
-        //     if (n == this.graph.getNodes().get(this.graph.getNbNodes() - 1)) {
-        //         System.out.print(" | ");
-        //     }
-        // }
+        // printing results
+        System.out.println("_________________________");
+        System.out.print("nodes | ");
+        for (DirectedNode n : this.graph.getNodes()) {
+            System.out.print(getLetterFromPosition(n.getLabel() + 1) + " ");
+            if (n == this.graph.getNodes().get(this.graph.getNbNodes() - 1)) {
+                System.out.println(" | ");
+            }
+        }
+        System.out.print("val   | ");
+        for (DirectedNode n : this.graph.getNodes()) {
+            System.out.print(val.get(n.getLabel()) + " ");
+            if (n == this.graph.getNodes().get(this.graph.getNbNodes() - 1)) {
+                System.out.print(" | ");
+            }
+        }
     }
 
     public static void main(String[] args) throws Exception {
