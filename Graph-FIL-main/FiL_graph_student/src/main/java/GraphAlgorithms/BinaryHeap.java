@@ -27,21 +27,74 @@ public class BinaryHeap {
         return pos == 0;
     }
 
-    public void insert(int element) {
-    	// A completer
+    public boolean insert(int element) {
+
+        if(this.nodes.length <= pos)
+        {
+            // Si la taille du tableau n'est pas suffisante, on le resize
+            this.resize();
+        }
+
+        // Ajout de l'élément
+        this.nodes[pos] = element;
+
+        int currentPos = pos;
+
+        int oldParentPos = 0;
+        // On swap l'élément sur la bonne branche (percolate up)
+        // Q3 Dans le pire des cas, la complexité est de O(log(pos)) avec une moyenne de O(1)
+        while (currentPos != 0 && this.nodes[currentPos] < this.nodes[this.getParentPos(currentPos)]) {
+            oldParentPos = this.getParentPos(currentPos);
+            this.swap(currentPos, oldParentPos);
+            currentPos = oldParentPos;
+        }
+
+        pos++;
+
+        return true; // Vraiment une utilité ?
+    }
+
+    public int getParentPos(int child) 
+    {
+        // retourne l'index du parent (integer arrondie par défaut)
+        return child != 0 ? (child - 1) / 2 : 0; 
     }
 
     public int remove() {
-    	// A completer
-    	return 0;
+    	// 1. Permuter la racine de l'arbre avec la dernière feuille utilisée et la supprimer
+
+        swap(0, this.pos - 1);
+        this.nodes[this.pos  - 1] = Integer.MAX_VALUE;
+        this.pos--;
+
+        int i = 0, oldPos = 0;
+        boolean treeChanged = true;
+        
+        // 2. Percolate down
+        while(!isLeaf(i) && treeChanged) // dans tous les cas, complexité de O(log(pos))
+        {
+            treeChanged = false;
+            if(this.nodes[this.getBestChildPos(i)] < this.nodes[i])
+            {
+                oldPos = this.getBestChildPos(i);
+                this.swap(i, oldPos);
+                i = oldPos;
+                treeChanged = true;
+            }
+        }
+
+    	return i;
     }
 
     private int getBestChildPos(int src) {
         if (isLeaf(src)) { // the leaf is a stopping case, then we return a default value
             return Integer.MAX_VALUE;
         } else {
-        	// A completer
-        	return Integer.MAX_VALUE;
+        	if(2 * src + 2 > pos) {
+                return 2 * src + 1;
+            }
+            // Retourne l'index de la plus petite des deux feuilles
+        	return this.nodes[2 * src + 1] < this.nodes[2 * src + 2] ? 2 * src + 1 : 2 * src + 2;
         }
     }
 
@@ -53,8 +106,8 @@ public class BinaryHeap {
 	 * 
 	 */	
     private boolean isLeaf(int src) {
-    	// A completer
-    	return false;
+        // Si pas d'enfants, c'est une feuille
+    	return this.pos <= src * 2 + 1 && this.pos <= src * 2 + 2;
     }
 
     private void swap(int father, int child) {
@@ -98,19 +151,38 @@ public class BinaryHeap {
     public static void main(String[] args) {
         BinaryHeap jarjarBin = new BinaryHeap();
         System.out.println(jarjarBin.isEmpty()+"\n");
-        int k = 20;
-        int m = k;
-        int min = 2;
-        int max = 20;
-        while (k > 0) {
-            int rand = min + (int) (Math.random() * ((max - min) + 1));
-            System.out.print("insert " + rand);
-            jarjarBin.insert(rand);            
-            k--;
-        }
-     // A completer
+        
+        // int k = 20;
+        // int m = k;
+        // int min = 2;
+        // int max = 20;
+        // while (k > 0) {
+        //     int rand = min + (int) (Math.random() * ((max - min) + 1));
+        //     System.out.print(" insert " + rand);
+        //     jarjarBin.insert(rand);            
+        //     k--;
+        // }
+
+        // Q4 
+        jarjarBin.insert(4);
+        jarjarBin.insert(10);
+        jarjarBin.insert(8);
+        jarjarBin.insert(6);
+        jarjarBin.insert(3);
+
         System.out.println("\n" + jarjarBin);
         System.out.println(jarjarBin.test());
+
+        // Q5
+        System.out.println(jarjarBin.nodes[jarjarBin.getBestChildPos(0)]); // Doit être la valeur 4 qui est plus petite que 8
+    
+        // Q7
+        System.out.println(jarjarBin);
+        jarjarBin.remove();
+        System.out.println(jarjarBin);
+        jarjarBin.remove();
+        System.out.println(jarjarBin);
+
     }
 
 }
