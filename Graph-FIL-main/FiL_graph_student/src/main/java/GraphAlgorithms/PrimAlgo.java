@@ -36,6 +36,8 @@ public class PrimAlgo {
         int currentCost;
         int neighbourWeight;
 
+        System.out.println("=============== DEROULEMENT DE PRIM ================");
+
         while (visitedNodes.size() < this.graph.getNbNodes()) {
             for (UndirectedNode neighbour : currentNode.getNeighbours().keySet()) {
                 neighbourWeight = currentNode.getNeighbours().get(neighbour);
@@ -53,14 +55,14 @@ public class PrimAlgo {
                 from = minEdge.getFirst();
                 to = minEdge.getSecond();
             }
-            
+
             currentCost = minEdge.getThird();
 
             // Ajout de la valeur de l'arête au poids total
             totalCost += currentCost;
             minimumTree.addEdge(from, to, currentCost);
 
-            // Note le noeud adjacent comme visité si pas déjà visité 
+            // Note le noeud adjacent comme visité si pas déjà visité
             if (visitedNodes.contains(from)) {
                 visitedNodes.add(to);
                 currentNode = this.graph.getNodeOfList(to);
@@ -68,9 +70,14 @@ public class PrimAlgo {
                 visitedNodes.add(from);
                 currentNode = this.graph.getNodeOfList(from);
             }
+            System.out.println("Visit : " + visitedNodes);
+            System.out.println("Tree : \n" + minimumTree);
 
         }
-        return totalCost; 
+        System.out.println("Poids total : " + totalCost);
+        System.out.println("================================================");
+
+        return totalCost;
     }
 
     public static void main(String[] args) {
@@ -94,9 +101,7 @@ public class PrimAlgo {
 
         // run Prim's Algorithm
         PrimAlgo primInstance = new PrimAlgo(graph);
-        int minimumCost = primInstance.runPrimAlgo(new UndirectedNode(E));
-        System.out.println("total cost : " + minimumCost);
-        System.out.println("Minimum tree : " + primInstance.minimumTree);
+        primInstance.runPrimAlgo(new UndirectedNode(E));
     }
 
 }

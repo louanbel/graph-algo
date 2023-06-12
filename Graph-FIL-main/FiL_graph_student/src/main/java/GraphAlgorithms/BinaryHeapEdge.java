@@ -44,7 +44,6 @@ public class BinaryHeapEdge {
 		// O(1)
 		while (currentPos != 0 && this.binh.get(parentPos).getThird() > this.binh.get(currentPos).getThird()) {
 			this.swap(currentPos, parentPos);
-			System.out.println(currentPos);
 			currentPos = parentPos;
 			parentPos = this.getParentPos(currentPos);
 		}
@@ -65,27 +64,30 @@ public class BinaryHeapEdge {
 	 * 
 	 */
 	public Triple<UndirectedNode, UndirectedNode, Integer> remove() {
+		// 0. Cas binary heap vide
+		if (this.binh.size() <= 0)
+			return null;
+
 		// 1. Permuter la racine de l'arbre avec la dernière feuille utilisée et la
 		// supprimer
 		swap(0, this.binh.size() - 1);
-		this.binh.remove(this.binh.size() - 1);
+
+		Triple<UndirectedNode, UndirectedNode, Integer> result = this.binh.remove(this.binh.size() - 1);
 
 		int i = 0, oldPos = 0;
-        boolean treeChanged = true;
-
-        // 2. Percolate down
-        while (!isLeaf(i) && treeChanged) // dans tous les cas, complexité de O(log(pos))
-        {
-            treeChanged = false;
-            if (this.binh.get(this.getBestChildPos(i)).getThird() < this.binh.get(i).getThird()) {
-                oldPos = this.getBestChildPos(i);
-                this.swap(i, oldPos);
-                i = oldPos;
-                treeChanged = true;
-            }
-        }
-
-        return this.binh.get(i);
+		boolean treeChanged = true;
+		// 2. Percolate down
+		while (!isLeaf(i) && treeChanged) // dans tous les cas, complexité de O(log(pos))
+		{
+			treeChanged = false;
+			if (this.binh.get(this.getBestChildPos(i)).getThird() < this.binh.get(i).getThird()) {
+				oldPos = this.getBestChildPos(i);
+				this.swap(i, oldPos);
+				i = oldPos;
+				treeChanged = true;
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -228,14 +230,14 @@ public class BinaryHeapEdge {
 		System.out.println(jarjarBin.binh.get(jarjarBin.getBestChildPos(1))); // doit être la valeur 6, qui est plus
 																				// petite que 10
 		System.out.println(jarjarBin.test());
-		
-        // Q7
-        jarjarBin.remove();
+
+		// Q7
+		jarjarBin.remove();
 		System.out.println("========= First remove =========");
-        jarjarBin.lovelyPrinting();
+		jarjarBin.lovelyPrinting();
 		System.out.println("========= Second remove =========");
-        jarjarBin.remove();
-        jarjarBin.lovelyPrinting();
+		jarjarBin.remove();
+		jarjarBin.lovelyPrinting();
 
 	}
 
