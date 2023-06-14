@@ -1,15 +1,8 @@
 package GraphAlgorithms;
 
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
 import AdjacencyList.AdjacencyListDirectedGraph;
-import AdjacencyList.AdjacencyListDirectedValuedGraph;
-import AdjacencyList.AdjacencyListUndirectedValuedGraph;
-import Collection.Triple;
 import Nodes.DirectedNode;
-import Nodes.UndirectedNode;
 
 public class GraphToolsList  extends GraphTools {
 
@@ -47,7 +40,7 @@ public class GraphToolsList  extends GraphTools {
 			visited[i] = false;
 		}
 		visited[startVertex] = true;
-		fifo = new LinkedList<Integer>();
+		fifo = new LinkedList<>();
 		fifo.add(startVertex);
 		while (!fifo.isEmpty()) {
 			int currentVertex = fifo.poll();
@@ -79,9 +72,37 @@ public class GraphToolsList  extends GraphTools {
 		for (int i = 0; i < visited.length; i++) {
 			visited[i] = false;
 		}
+		fin = new ArrayList<>();
 		for (int i = 0; i < visited.length; i++) {
 			if (!visited[i]) {
 				explorerSommet(graph, i, visited);
+			}
+		}
+	}
+
+
+	public static void explorerSommetBis(AdjacencyListDirectedGraph graph, int vertex, boolean[] visited) {
+		visited[vertex] = true;
+		System.out.print(vertex + " ");
+		for (DirectedNode node : graph.getNodes().get(vertex).getSuccs().keySet()) {
+			int succ = node.getLabel();
+			if (!visited[succ]) {
+				explorerSommetBis(graph, succ, visited);
+			}
+		}
+	}
+
+	public static void explorerGrapheBis(AdjacencyListDirectedGraph graph) {
+		boolean[] visited = new boolean[graph.getNbNodes()];
+		for (int i = 0; i < visited.length; i++) {
+			visited[i] = false;
+		}
+		for (int i = fin.size() - 1; i >= 0; i--) {
+			int vertex = fin.get(i);
+			if (!visited[vertex]) {
+				System.out.print("From vertex " + vertex + ": ");
+				explorerSommetBis(graph, vertex, visited);
+				System.out.println();
 			}
 		}
 	}
@@ -101,6 +122,11 @@ public class GraphToolsList  extends GraphTools {
 
 		System.out.println("DFS Traversal:");
 		explorerGraphe(al);
+
+		System.out.println("\nOrder of completely explored vertices: " + fin);
+
+		System.out.println("DFS Traversal bis :");
+		explorerGrapheBis(al);
 
 		System.out.println("\nOrder of completely explored vertices: " + fin);
 	}
