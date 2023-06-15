@@ -33,7 +33,6 @@ public class GraphToolsList  extends GraphTools {
 	// 				Methods
 	// ------------------------------------------
 
-	// A completer
 	public static void BFS(AdjacencyListDirectedGraph graph, int startVertex) {
 		boolean[] visited = new boolean[graph.getNbNodes()];
 		for (int i = 0; i < visited.length; i++) {

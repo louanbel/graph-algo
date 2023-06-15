@@ -81,7 +81,7 @@ public class PrimAlgo {
     }
 
     public static void main(String[] args) {
-        // Graph from course's example
+        // Test avec l'exemple de déroulement d'algo de Prim mis sur moodle
         int A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6, H = 7;
         AdjacencyListUndirectedValuedGraph graph = new AdjacencyListUndirectedValuedGraph(new int[8][8]);
         graph.addEdge(new UndirectedNode(A), new UndirectedNode(B), 4);
@@ -99,9 +99,9 @@ public class PrimAlgo {
         graph.addEdge(new UndirectedNode(G), new UndirectedNode(E), 4);
         System.out.println(graph.toString());
 
-        // run Prim's Algorithm
         PrimAlgo primInstance = new PrimAlgo(graph);
         primInstance.runPrimAlgo(new UndirectedNode(E));
+
     }
 
 }

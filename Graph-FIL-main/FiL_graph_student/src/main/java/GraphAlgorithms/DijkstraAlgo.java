@@ -1,4 +1,5 @@
 package GraphAlgorithms;
+
 import java.util.ArrayList;
 import AdjacencyList.AdjacencyListDirectedValuedGraph;
 import Nodes.DirectedNode;
@@ -14,11 +15,9 @@ public class DijkstraAlgo {
         return x.getSuccs().get(y);
     }
 
-    public char getLetterFromPosition(int position) {
-        if (position < 1 || position > 26) {
-            throw new IllegalArgumentException("Position invalide. La position doit être entre 1 et 26.");
-        }
-        char letter = (char) ('A' + position - 1);
+    // Helper pour faire un bel affichage
+    public char getLetterFromPosition(int p) {
+        char letter = (char) ('A' + p - 1);
         return letter;
     }
 
@@ -27,7 +26,7 @@ public class DijkstraAlgo {
         ArrayList<DirectedNode> pred = new ArrayList<DirectedNode>();
         ArrayList<Integer> val = new ArrayList<Integer>();
 
-        // Initializing
+        // Initialisation des valeurs
         for (DirectedNode n : this.graph.getNodes()) {
             edgeMarked.add(n.getLabel(), false);
             val.add(n.getLabel(), Integer.MAX_VALUE / 2);
@@ -38,10 +37,10 @@ public class DijkstraAlgo {
         val.set(initialNode.getLabel(), 0);
         pred.set(initialNode.getLabel(), initialNode);
 
-        // While all the nodes are not marked
+        // Tant que tous les noeuds ne sont pas marqués
         while (edgeMarked.contains(false)) {
             int x = 0;
-            // Look for node x not marked with minimal value
+            // On cherche le noeud x non marqué avec la valeur minimum
             int min = Integer.MAX_VALUE / 2;
 
             for (int y = 0; y < this.graph.getNbNodes(); y++) {
@@ -51,7 +50,7 @@ public class DijkstraAlgo {
                 }
             }
 
-            // Update not fixed successors of x
+            // Mise à jour des noeuds successeurs de x
             if (min < Integer.MAX_VALUE) {
                 edgeMarked.set(x, true);
                 DirectedNode nodeX = this.graph.getNodes().get(x);
@@ -66,11 +65,11 @@ public class DijkstraAlgo {
             }
         }
 
-        // printing results
+        // Bel affichage des résultats
         System.out.println("--------------------------------------------");
         System.out.print("nodes | ");
         for (DirectedNode n : this.graph.getNodes()) {
-            System.out.print(getLetterFromPosition(n.getLabel() + 1) + "   ");
+            System.out.print((char) ('A' + (n.getLabel() + 1) - 1) + "   "); // Tricks pour afficher la lettre du sommet
             if (n == this.graph.getNodes().get(this.graph.getNbNodes() - 1)) {
                 System.out.println("");
             }
@@ -86,16 +85,10 @@ public class DijkstraAlgo {
     }
 
     public static void main(String[] args) throws Exception {
-        int A = 0,
-                B = 1,
-                C = 2,
-                D = 3,
-                E = 4,
-                F = 5,
-                G = 6,
-                H = 7;
 
-        // Using class example
+        // Test avec l'exemple de déroulement d'algo de Dijkstra mis sur moodle
+        int A = 0, B = 1, C = 2, D = 3, E = 4, F = 5, G = 6, H = 7;
+
         AdjacencyListDirectedValuedGraph graph = new AdjacencyListDirectedValuedGraph(new int[8][8]);
         graph.addArc(new DirectedNode(A), new DirectedNode(B), 2);
         graph.addArc(new DirectedNode(A), new DirectedNode(C), 6);
@@ -116,7 +109,6 @@ public class DijkstraAlgo {
         graph.addArc(new DirectedNode(H), new DirectedNode(F), 3);
         DijkstraAlgo dijkstraAlgo = new DijkstraAlgo(graph);
 
-        // Using A as initial node
-        dijkstraAlgo.runDijkstraAlgo(graph.getNodes().get(0));
+        dijkstraAlgo.runDijkstraAlgo(graph.getNodes().get(0)); // Test avec A comme noeud initial
     }
 }
